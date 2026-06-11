@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="hr_leave_sign_request_wizard_form_view" model="ir.ui.view">
+        <field name="name">hr.leave.sign.request.wizard.form</field>
+        <field name="model">hr.leave.sign.request.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Podpisz i załącz wniosek">
+                <group>
+                    <field name="leave_id" invisible="1" />
+                    <field name="template_id" />
+                    <field name="manager_partner_id" />
+                </group>
+                <footer>
+                    <button
+                        name="action_create_request"
+                        type="object"
+                        string="Start signing"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
