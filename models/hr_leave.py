@@ -1,4 +1,4 @@
-from odoo import _, fields, models
+from odoo import _, fields, models, api
 from odoo.exceptions import UserError
 
 
@@ -9,6 +9,66 @@ class HrLeave(models.Model):
     sign_request_attachment_id = fields.Many2one(
         "ir.attachment", copy=False, readonly=True
     )
+
+    is_planned = fields.Boolean(
+        string="Planned Request",
+        help="This request is only a plan and cannot be approved."
+    )
+
+    display_status = fields.Selection(
+        selection=[
+            ("planned", "Planned"),
+            ("confirm", "To Approve"),
+            ("validate1", "Second Approval"),
+            ("validate", "Approved"),
+            ("refuse", "Refused"),
+            ("cancel", "Cancelled"),
+            ("draft", "Draft"),
+        ],
+        compute="_compute_display_status",
+        store=False,
+    )
+
+    display_state = fields.Char(
+        compute="_compute_display_state"
+    )
+
+    @api.depends("state", "is_planned")
+    def _compute_display_state(self):
+        states = dict(self._fields["state"].selection)
+
+        for leave in self:
+            leave.display_state = (
+                "Planned"
+                if leave.is_planned
+                else states.get(leave.state)
+            )
+
+    @api.depends("state", "is_planned")
+    def _compute_display_status(self):
+        for leave in self:
+            if leave.is_planned:
+                leave.display_status = "planned"
+            else:
+                leave.display_status = leave.state
+
+    def action_approve(self, check_state=True):
+        planned = self.filtered("is_planned")
+        if planned:
+            raise UserError(
+                _("Planned requests cannot be approved.")
+            )
+
+        return super().action_approve(check_state=check_state)
+
+    def action_validate(self, check_state=True):
+        planned = self.filtered("is_planned")
+        if planned:
+            raise UserError(
+                _("Planned requests cannot be validated.")
+            )
+
+        return super().action_validate(check_state=check_state)
 
     def action_open_sign_request_wizard(self):
         self.ensure_one()
