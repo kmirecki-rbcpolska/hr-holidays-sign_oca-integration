@@ -10,6 +10,7 @@
     "data": [
         "security/ir.model.access.csv",
         "wizards/hr_leave_sign_request_wizard_views.xml",
+        "views/sign_oca_template_views.xml",
         "views/hr_leave_views.xml",
     ],
     "installable": True,

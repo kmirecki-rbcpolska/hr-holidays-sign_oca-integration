@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="sign_oca_template_form_view_inherit_hr_holidays" model="ir.ui.view">
+        <field name="name">sign.oca.template.form.inherit.hr.holidays</field>
+        <field name="model">sign.oca.template</field>
+        <field name="inherit_id" ref="sign_oca.sign_oca_template_form_view" />
+        <field name="arch" type="xml">
+            <field name="model_id" position="after">
+                <field name="time_off_type_id" invisible="model != 'hr.leave'" />
+            </field>
+        </field>
+    </record>
+</odoo>

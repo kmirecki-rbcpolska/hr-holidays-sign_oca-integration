@@ -46,6 +46,8 @@ class HrLeaveSignRequestWizard(models.TransientModel):
         leave = self.leave_id.sudo()
         if leave.sign_request_id:
             raise UserError(_("This time off request already has a sign request."))
+        if self.template_id.time_off_type_id:
+            leave.write({"holiday_status_id": self.template_id.time_off_type_id.id})
         request_vals = self.template_id._prepare_sign_oca_request_vals_from_record(
             leave
         )

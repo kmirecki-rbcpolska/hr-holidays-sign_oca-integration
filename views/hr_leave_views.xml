@@ -31,6 +31,10 @@
                 <field name="is_planned"/>
             </xpath>
 
+            <xpath expr="//field[@name='holiday_status_id']" position="attributes">
+                <attribute name="readonly">state in ['cancel', 'refuse', 'validate', 'validate1'] or sign_request_attachment_id</attribute>
+            </xpath>
+
             <xpath expr="//header" position="inside">
                 <div class="badge text-bg-warning"
                      invisible="not is_planned">

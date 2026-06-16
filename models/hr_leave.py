@@ -135,6 +135,20 @@ class HrLeave(models.Model):
             return False
         return signer.sign()
 
+    def write(self, vals):
+        if "holiday_status_id" in vals and vals.get("sign_request_attachment_id") is not False:
+            locked_leaves = self.filtered(
+                lambda leave: leave.sign_request_attachment_id
+                and leave.holiday_status_id.id != vals["holiday_status_id"]
+            )
+            if locked_leaves:
+                raise UserError(
+                    _(
+                        "You cannot change the time off type while a signed document is attached. Remove the signed document first."
+                    )
+                )
+        return super().write(vals)
+
     def action_approve(self, check_state=True):
         result = super().action_approve(check_state=check_state)
         if len(self) == 1:
