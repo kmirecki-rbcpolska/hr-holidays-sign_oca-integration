@@ -7,7 +7,6 @@
             <form string="Podpisz i załącz wniosek">
                 <group>
                     <field name="leave_id" invisible="1" />
-                    <field name="available_manager_partner_ids" invisible="1" />
                     <field name="template_id" />
                     <field name="manager_partner_id" />
                 </group>

@@ -8,8 +8,12 @@
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
         <field name="arch" type="xml">
 
+            <xpath expr="//label[@for='supported_attachment_ids']" position="attributes">
+                <attribute name="invisible">state not in ('confirm', 'validate1')</attribute>
+            </xpath>
+
             <xpath expr="//field[@name='supported_attachment_ids']" position="replace">
-                <div class="o_row" invisible="not leave_type_support_document or state not in ('confirm', 'validate1')">
+                <div class="o_row" invisible="state not in ('confirm', 'validate1')">
                     <field name="supported_attachment_ids" widget="many2many_binary" nolabel="1"/>
                     <field name="sign_request_id" invisible="1"/>
                     <field name="sign_request_attachment_id" invisible="1"/>

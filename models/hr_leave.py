@@ -1,9 +1,15 @@
+import re
+
 from odoo import _, fields, models, api
 from odoo.exceptions import UserError
 
 
 class HrLeave(models.Model):
     _inherit = "hr.leave"
+
+    _SIGNED_COPY_EMAILS_PARAM = (
+        "hr_holidays_sign_oca_integration.signed_document_notification_emails"
+    )
 
     sign_request_id = fields.Many2one("sign.oca.request", copy=False, readonly=True)
     sign_request_attachment_id = fields.Many2one(
@@ -134,6 +140,48 @@ class HrLeave(models.Model):
         if not signer or not signer.is_allow_signature:
             return False
         return signer.sign()
+
+    @api.model
+    def _get_signed_document_notification_emails(self):
+        raw_value = (
+            self.env["ir.config_parameter"].sudo().get_param(
+                self._SIGNED_COPY_EMAILS_PARAM, default=""
+            )
+            or ""
+        )
+        return [
+            email.strip()
+            for email in re.split(r"[,;\n]+", raw_value)
+            if email.strip()
+        ]
+
+    def _send_signed_document_copy(self, manager_partner):
+        self.ensure_one()
+        attachment = self.sign_request_attachment_id.sudo()
+        if not attachment:
+            return
+
+        recipient_emails = set(self._get_signed_document_notification_emails())
+        if (
+            manager_partner
+            and manager_partner.email
+            and not self.env.company.sign_oca_send_sign_request_copy
+        ):
+            recipient_emails.add(manager_partner.email.strip())
+
+        if not recipient_emails:
+            return
+
+        mail_values = {
+            "subject": _("Signed time off request: %(name)s", name=self.display_name),
+            "body_html": _(
+                "<p>The signed time off request <strong>%(name)s</strong> is attached.</p>",
+                name=self.display_name,
+            ),
+            "email_to": ",".join(sorted(recipient_emails)),
+            "attachment_ids": [(6, 0, attachment.ids)],
+        }
+        self.env["mail.mail"].sudo().create(mail_values).send()
 
     def write(self, vals):
         if "holiday_status_id" in vals and vals.get("sign_request_attachment_id") is not False:

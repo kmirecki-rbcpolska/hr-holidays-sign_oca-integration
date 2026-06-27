@@ -7,9 +7,6 @@ class HrLeaveSignRequestWizard(models.TransientModel):
     _description = "Create a sign request for a leave"
 
     leave_id = fields.Many2one("hr.leave", required=True, readonly=True)
-    available_manager_partner_ids = fields.Many2many(
-        "res.partner", compute="_compute_available_manager_partner_ids"
-    )
     template_id = fields.Many2one(
         "sign.oca.template",
         required=True,
@@ -19,16 +16,14 @@ class HrLeaveSignRequestWizard(models.TransientModel):
         "res.partner",
         string="Manager",
         required=True,
-        domain="[('id', 'in', available_manager_partner_ids)]",
+        domain=lambda self: [("id", "in", self._get_available_manager_partner_ids().ids)],
     )
 
-    @api.depends_context("uid")
-    def _compute_available_manager_partner_ids(self):
-        managers = self.env["hr.employee"].search(
-            [("leave_manager_id", "!=", False)]
-        ).mapped("leave_manager_id.partner_id")
-        for wizard in self:
-            wizard.available_manager_partner_ids = managers
+    @api.model
+    def _get_available_manager_partner_ids(self):
+        return self.env["hr.employee"].sudo().search(
+            [("parent_id.user_id", "!=", False)]
+        ).mapped("parent_id.user_id.partner_id")
 
     @api.model
     def default_get(self, fields_list):
@@ -45,9 +40,10 @@ class HrLeaveSignRequestWizard(models.TransientModel):
             )
             if template:
                 res["template_id"] = template.id
-        if leave and leave.employee_id and leave.employee_id.leave_manager_id:
+        employee_manager = leave.employee_id.parent_id.user_id if leave and leave.employee_id else False
+        if employee_manager:
             res.setdefault(
-                "manager_partner_id", leave.employee_id.leave_manager_id.partner_id.id
+                "manager_partner_id", employee_manager.partner_id.id
             )
         return res
 
@@ -66,9 +62,10 @@ class HrLeaveSignRequestWizard(models.TransientModel):
         self.ensure_one()
         employee_role, manager_role = self._get_template_roles()
         leave = self.leave_id.sudo()
+        available_manager_partners = self._get_available_manager_partner_ids()
         if leave.sign_request_id:
             raise UserError(_("This time off request already has a sign request."))
-        if self.manager_partner_id not in self.available_manager_partner_ids:
+        if self.manager_partner_id not in available_manager_partners:
             raise UserError(
                 _("Please choose a manager from the available manager list.")
             )
