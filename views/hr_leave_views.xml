@@ -47,11 +47,11 @@
             </xpath>
 
             <xpath expr="//button[@name='action_approve']" position="attributes">
-                <attribute name="invisible">is_planned</attribute>
+                <attribute name="invisible">is_planned or not can_approve or state != 'confirm'</attribute>
             </xpath>
 
-            <xpath expr="//button[@name='action_validate']" position="attributes">
-                <attribute name="invisible">is_planned</attribute>
+            <xpath expr="//button[@name='action_refuse']" position="attributes">
+                <attribute name="invisible">is_planned or not can_approve or state not in ('confirm', 'validate1', 'validate')</attribute>
             </xpath>
 
         </field>
