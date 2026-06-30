@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Invoice",
+  "type": "object",
+  "required": [
+    "invoice_number",
+    "vendor",
+    "invoice_date",
+    "currency",
+    "lines",
+    "cost_center"
+  ],
+  "properties": {
+    "source_file": {
+      "type": "string"
+    },
+    "cost_center": {
+      "type": "string"
+    },
+    "invoice_number": {
+      "type": "string"
+    },
+    "ksef_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "invoice_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "delivery_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "currency": {
+      "type": "string",
+      "default": "PLN"
+    },
+    "vendor": {
+      "$ref": "#/$defs/company"
+    },
+    "customer": {
+      "$ref": "#/$defs/company"
+    },
+    "totals": {
+      "type": "object",
+      "properties": {
+        "net_amount": {
+          "type": "number"
+        },
+        "tax_amount": {
+          "type": "number"
+        },
+        "gross_amount": {
+          "type": "number"
+        }
+      }
+    },
+    "payment": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "paid",
+            "unpaid",
+            "partial",
+            "unknown"
+          ]
+        },
+        "payment_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "payment_method": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/invoiceLine"
+      }
+    }
+  },
+  "$defs": {
+    "company": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "vat": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "street": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "postal_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "country": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "invoiceLine": {
+      "type": "object",
+      "required": [
+        "description",
+        "quantity"
+      ],
+      "properties": {
+        "line_number": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "vendor_sku": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ean": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "internal_sku": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "uom": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unit_price_net": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "unit_price_gross": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "line_net": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "line_tax": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "line_gross": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "vat_rate": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "create_product": {
+          "type": "boolean",
+          "default": true
+        },
+        "product_type": {
+          "enum": [
+            "storable",
+            "consumable",
+            "service"
+          ]
+        }
+      }
+    }
+  }
+}

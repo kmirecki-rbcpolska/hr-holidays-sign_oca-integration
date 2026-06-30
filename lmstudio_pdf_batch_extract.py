@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Batch-extract structured data from PDFs with LM Studio.
 
-This script reads every PDF from an input directory, runs OCR on each page,
-sends the extracted text plus a JSON schema to LM Studio's OpenAI-compatible
-`/v1/chat/completions` endpoint, and writes one JSON output file per PDF.
+This script reads every PDF from an input directory, renders each page to an
+image, sends those images to LM Studio's OpenAI-compatible
+`/v1/chat/completions` endpoint along with a JSON schema, and writes one JSON
+output file per PDF.
 
 Usage example:
 
@@ -13,14 +14,12 @@ Usage example:
         --schema-file /path/to/schema.json \
         --model qwen2.5-7b-instruct
 
-Requirements:
-
-    sudo apt install poppler-utils tesseract-ocr
 """
 
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import shutil
 import subprocess
@@ -68,7 +67,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--system-prompt",
         default=(
-            "Extract structured data from the provided PDF text. "
+            "Extract structured data from the provided PDF. "
             "Return only JSON that matches the supplied schema. "
             "If a field is missing, use null when allowed by the schema."
         ),
@@ -76,8 +75,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--user-prompt",
-        default="Extract structured data from this PDF text.",
-        help="User instruction prefix sent before the extracted PDF text.",
+        default="Extract structured data from this PDF.",
+        help="User instruction sent alongside the PDF page images.",
     )
     parser.add_argument(
         "--glob",
@@ -95,6 +94,12 @@ def parse_args() -> argparse.Namespace:
         default=0.0,
         help="Sampling temperature for the model.",
     )
+    parser.add_argument(
+        "--dpi",
+        type=int,
+        default=150,
+        help="Render DPI used when converting PDF pages to PNG images.",
+    )
     return parser.parse_args()
 
 
@@ -104,26 +109,22 @@ def read_schema(schema_file: Path) -> dict[str, Any]:
 
 
 def ensure_required_commands() -> None:
-    missing = [
-        command
-        for command in ("pdftoppm", "tesseract")
-        if shutil.which(command) is None
-    ]
-    if missing:
-        joined = ", ".join(missing)
+    if shutil.which("pdftoppm") is None:
         raise SystemExit(
-            f"Missing required system commands: {joined}. Install poppler-utils and tesseract-ocr."
+            "Missing required system command: pdftoppm. Install poppler-utils."
         )
 
 
-def extract_pdf_text(pdf_path: Path) -> str:
-    with tempfile.TemporaryDirectory(prefix="lmstudio_pdf_ocr_") as temp_dir:
+def render_pdf_pages(pdf_path: Path, dpi: int) -> list[str]:
+    with tempfile.TemporaryDirectory(prefix="lmstudio_pdf_pages_") as temp_dir:
         temp_path = Path(temp_dir)
         image_prefix = temp_path / "page"
         subprocess.run(
             [
                 "pdftoppm",
                 "-png",
+                "-r",
+                str(dpi),
                 str(pdf_path),
                 str(image_prefix),
             ],
@@ -132,21 +133,16 @@ def extract_pdf_text(pdf_path: Path) -> str:
             text=True,
         )
 
-        pages: list[str] = []
         image_files = sorted(temp_path.glob("page-*.png"))
         if not image_files:
             raise ValueError(f"No page images were generated for {pdf_path}")
 
-        for index, image_file in enumerate(image_files, start=1):
-            result = subprocess.run(
-                ["tesseract", str(image_file), "stdout"],
-                check=True,
-                capture_output=True,
-                text=True,
-            )
-            pages.append(f"\n--- OCR Page {index} ---\n{result.stdout.strip()}")
+        image_urls: list[str] = []
+        for image_file in image_files:
+            encoded = base64.b64encode(image_file.read_bytes()).decode("ascii")
+            image_urls.append(f"data:image/png;base64,{encoded}")
 
-    return "\n".join(pages).strip()
+    return image_urls
 
 
 def build_payload(
@@ -155,9 +151,27 @@ def build_payload(
     system_prompt: str,
     user_prompt: str,
     pdf_name: str,
-    pdf_text: str,
+    page_image_urls: list[str],
     temperature: float,
 ) -> dict[str, Any]:
+    user_content: list[dict[str, Any]] = [
+        {
+            "type": "text",
+            "text": (
+                f"{user_prompt}\n\n"
+                f"PDF filename: {pdf_name}\n"
+                f"Page count: {len(page_image_urls)}"
+            ),
+        }
+    ]
+    user_content.extend(
+        {
+            "type": "image_url",
+            "image_url": {"url": image_url},
+        }
+        for image_url in page_image_urls
+    )
+
     return {
         "model": model,
         "temperature": temperature,
@@ -165,12 +179,7 @@ def build_payload(
             {"role": "system", "content": system_prompt},
             {
                 "role": "user",
-                "content": (
-                    f"{user_prompt}\n\n"
-                    f"PDF filename: {pdf_name}\n\n"
-                    "PDF text:\n"
-                    f"{pdf_text}"
-                ),
+                "content": user_content,
             },
         ],
         "response_format": {
@@ -231,9 +240,7 @@ def process_pdf(
         print(f"Skipping {pdf_path.name}: output already exists", file=sys.stderr)
         return
 
-    pdf_text = extract_pdf_text(pdf_path)
-    if not pdf_text:
-        raise ValueError(f"No extractable text found in {pdf_path}")
+    page_image_urls = render_pdf_pages(pdf_path, args.dpi)
 
     payload = build_payload(
         model=args.model,
@@ -241,7 +248,7 @@ def process_pdf(
         system_prompt=args.system_prompt,
         user_prompt=args.user_prompt,
         pdf_name=pdf_path.name,
-        pdf_text=pdf_text,
+        page_image_urls=page_image_urls,
         temperature=args.temperature,
     )
     response_data = post_json(args.endpoint, payload)
