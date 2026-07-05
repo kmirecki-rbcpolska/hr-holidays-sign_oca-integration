@@ -7,3 +7,7 @@
    1. szukamy centrów kosztowych (podział wydatków na kategorie i podkategorie eg. R&D -> labolatorium)
 7. limitacja widoczności faktur dla pracowników - jak tym sterować
 8. rozszerzenie odoo o moduł czasu pracy z modułem rpc portal (dostep do konta)
+9. automatyczne wypełnianie pól dni we wnioskach
+10. powiadomienia dla artura odnośnie urlopów
+11. usunięcie domyślnego filtru klienci w raportowaniu faktur
+12. Widok płatności faktur stworzonych na podstawie zamówienia dla danego pracownika
