@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="sign_field_time_off_start_date" model="sign.oca.field">
+        <field name="name">Time Off Start Date</field>
+        <field name="field_type">text</field>
+        <field name="default_value">time_off_start_date</field>
+    </record>
+    <record id="sign_field_time_off_end_date" model="sign.oca.field">
+        <field name="name">Time Off End Date</field>
+        <field name="field_type">text</field>
+        <field name="default_value">time_off_end_date</field>
+    </record>
+</odoo>

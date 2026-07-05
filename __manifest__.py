@@ -8,9 +8,11 @@
     "author": "Kacper Mirecki",
     "depends": ["hr_holidays", "sign_oca"],
     "data": [
+        "data/sign_oca_field_data.xml",
         "security/ir.model.access.csv",
         "wizards/hr_leave_sign_request_wizard_views.xml",
         "wizards/res_config_settings_views.xml",
+        "views/sign_oca_request_views.xml",
         "views/sign_oca_template_views.xml",
         "views/hr_leave_views.xml",
     ],

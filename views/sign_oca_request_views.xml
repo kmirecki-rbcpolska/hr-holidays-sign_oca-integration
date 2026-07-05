@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="sign_oca_request_form_view_inherit_hr_holidays" model="ir.ui.view">
+        <field name="name">sign.oca.request.form.inherit.hr.holidays</field>
+        <field name="model">sign.oca.request</field>
+        <field name="inherit_id" ref="sign_oca.sign_oca_request_form_view" />
+        <field name="arch" type="xml">
+            <field name="record_ref" position="after">
+                <field name="time_off_start_date" readonly="1" />
+                <field name="time_off_end_date" readonly="1" />
+            </field>
+        </field>
+    </record>
+</odoo>
