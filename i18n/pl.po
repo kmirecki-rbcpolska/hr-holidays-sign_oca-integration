@@ -15,14 +15,17 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2;\n"
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.module.module,shortdesc:hr_holidays_sign_oca_integration.module_hr_holidays_sign_oca_integration
 msgid "Time Off Sign Integration"
 msgstr "Integracja podpisu wniosków urlopowych"
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.module.module,summary:hr_holidays_sign_oca_integration.module_hr_holidays_sign_oca_integration
 msgid "Generate and sign leave requests with OCA Sign"
 msgstr "Tworzenie i podpisywanie wniosków urlopowych za pomocą OCA Sign"
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.model.fields,field_description:hr_holidays_sign_oca_integration.field_hr_leave__is_planned
 msgid "Planned Request"
 msgstr "Wniosek planowany"
 
@@ -33,6 +36,7 @@ msgid "This request is only a plan and cannot be approved."
 msgstr "Ten wniosek jest tylko planem i nie może zostać zatwierdzony."
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.model.fields.selection,name:hr_holidays_sign_oca_integration.selection__hr_leave__display_status__planned
 msgid "Planned"
 msgstr "Planowany"
 
@@ -73,14 +77,17 @@ msgid "You cannot change the time off type while a signed document is attached. 
 msgstr "Nie możesz zmienić typu nieobecności, gdy dołączony jest podpisany dokument. Najpierw usuń podpisany dokument."
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.model.fields,field_description:hr_holidays_sign_oca_integration.field_sign_oca_request__time_off_start_date
 msgid "Time Off Start Date"
 msgstr "Data rozpoczęcia urlopu"
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.model.fields,field_description:hr_holidays_sign_oca_integration.field_sign_oca_request__time_off_end_date
 msgid "Time Off End Date"
 msgstr "Data zakończenia urlopu"
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.model.fields,field_description:hr_holidays_sign_oca_integration.field_sign_oca_template__time_off_type_id
 msgid "Time Off Type"
 msgstr "Typ nieobecności"
 
@@ -91,10 +98,12 @@ msgid "Restrict this template to a specific time off type."
 msgstr "Ogranicz ten szablon do określonego typu nieobecności."
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.model,name:hr_holidays_sign_oca_integration.model_hr_leave_sign_request_wizard
 msgid "Create a sign request for a leave"
 msgstr "Utwórz prośbę o podpis dla wniosku urlopowego"
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.model.fields,field_description:hr_holidays_sign_oca_integration.field_hr_leave_sign_request_wizard__manager_partner_id
 msgid "Manager"
 msgstr "Przełożony"
 
@@ -117,22 +126,27 @@ msgid "Please choose a manager from the available manager list."
 msgstr "Wybierz przełożonego z listy dostępnych przełożonych."
 
 #. module: hr_holidays_sign_oca_integration
+#: model_terms:ir.ui.view,arch_db:hr_holidays_sign_oca_integration.hr_leave_sign_request_wizard_form_view
 msgid "Start signing"
 msgstr "Rozpocznij podpisywanie"
 
 #. module: hr_holidays_sign_oca_integration
+#: model_terms:ir.ui.view,arch_db:hr_holidays_sign_oca_integration.hr_leave_sign_request_wizard_form_view
 msgid "Cancel"
 msgstr "Anuluj"
 
 #. module: hr_holidays_sign_oca_integration
+#: model_terms:ir.ui.view,arch_db:hr_holidays_sign_oca_integration.res_config_settings_view_form_hr_holidays_sign_integration
 msgid "Time Off"
 msgstr "Czas wolny"
 
 #. module: hr_holidays_sign_oca_integration
+#: model_terms:ir.ui.view,arch_db:hr_holidays_sign_oca_integration.res_config_settings_view_form_hr_holidays_sign_integration
 msgid "Signed Time Off Documents"
 msgstr "Podpisane dokumenty urlopowe"
 
 #. module: hr_holidays_sign_oca_integration
+#: model:ir.model.fields,field_description:hr_holidays_sign_oca_integration.field_res_config_settings__time_off_signed_document_notification_emails
 msgid "Signed Time Off Document Emails"
 msgstr "Adresy e-mail dla podpisanych dokumentów urlopowych"
 
@@ -143,5 +157,6 @@ msgid "Additional email addresses that should receive signed time off documents.
 msgstr "Dodatkowe adresy e-mail, które powinny otrzymywać podpisane dokumenty urlopowe. Użyj przecinków lub średników."
 
 #. module: hr_holidays_sign_oca_integration
+#: model_terms:ir.ui.view,arch_db:hr_holidays_sign_oca_integration.res_config_settings_view_form_hr_holidays_sign_integration
 msgid "Additional email addresses that should receive the final signed time off document after the manager signs it."
 msgstr "Dodatkowe adresy e-mail, które powinny otrzymać końcowy podpisany dokument urlopowy po podpisie przełożonego."
