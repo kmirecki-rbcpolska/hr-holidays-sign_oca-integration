@@ -1,0 +1,147 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_holidays_sign_oca_integration
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"PO-Revision-Date: 2026-07-06 00:00+0000\n"
+"Last-Translator: GitHub Copilot <copilot@github.com>\n"
+"Language-Team: Polish\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2;\n"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Time Off Sign Integration"
+msgstr "Integracja podpisu wniosków urlopowych"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Generate and sign leave requests with OCA Sign"
+msgstr "Tworzenie i podpisywanie wniosków urlopowych za pomocą OCA Sign"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Planned Request"
+msgstr "Wniosek planowany"
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/models/hr_leave.py:0
+msgid "This request is only a plan and cannot be approved."
+msgstr "Ten wniosek jest tylko planem i nie może zostać zatwierdzony."
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Planned"
+msgstr "Planowany"
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/models/hr_leave.py:0
+msgid "Please select an employee on the time off request before starting the signing flow."
+msgstr "Przed rozpoczęciem procesu podpisu wybierz pracownika we wniosku urlopowym."
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/models/hr_leave.py:0
+msgid "Planned requests cannot be approved."
+msgstr "Planowane wnioski nie mogą zostać zaakceptowane."
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/models/hr_leave.py:0
+msgid "Planned requests cannot be validated."
+msgstr "Planowane wnioski nie mogą zostać zatwierdzone końcowo."
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/models/hr_leave.py:0
+msgid "Signed time off request: %(name)s"
+msgstr "Podpisany wniosek urlopowy: %(name)s"
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/models/hr_leave.py:0
+msgid "<p>The signed time off request <strong>%(name)s</strong> is attached.</p>"
+msgstr "<p>W załączniku znajduje się podpisany wniosek urlopowy <strong>%(name)s</strong>.</p>"
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/models/hr_leave.py:0
+msgid "You cannot change the time off type while a signed document is attached. Remove the signed document first."
+msgstr "Nie możesz zmienić typu nieobecności, gdy dołączony jest podpisany dokument. Najpierw usuń podpisany dokument."
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Time Off Start Date"
+msgstr "Data rozpoczęcia urlopu"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Time Off End Date"
+msgstr "Data zakończenia urlopu"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Time Off Type"
+msgstr "Typ nieobecności"
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/models/sign_oca_template.py:0
+msgid "Restrict this template to a specific time off type."
+msgstr "Ogranicz ten szablon do określonego typu nieobecności."
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Create a sign request for a leave"
+msgstr "Utwórz prośbę o podpis dla wniosku urlopowego"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Manager"
+msgstr "Przełożony"
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/wizards/hr_leave_sign_request_wizard.py:0
+msgid "The selected template must contain at least two roles: employee and manager."
+msgstr "Wybrany szablon musi zawierać co najmniej dwie role: pracownika i przełożonego."
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/wizards/hr_leave_sign_request_wizard.py:0
+msgid "This time off request already has a sign request."
+msgstr "Ten wniosek urlopowy ma już utworzoną prośbę o podpis."
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/wizards/hr_leave_sign_request_wizard.py:0
+msgid "Please choose a manager from the available manager list."
+msgstr "Wybierz przełożonego z listy dostępnych przełożonych."
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Start signing"
+msgstr "Rozpocznij podpisywanie"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Cancel"
+msgstr "Anuluj"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Time Off"
+msgstr "Czas wolny"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Signed Time Off Documents"
+msgstr "Podpisane dokumenty urlopowe"
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Signed Time Off Document Emails"
+msgstr "Adresy e-mail dla podpisanych dokumentów urlopowych"
+
+#. module: hr_holidays_sign_oca_integration
+#. odoo-python
+#: code:addons/hr_holidays_sign_oca_integration/wizards/res_config_settings.py:0
+msgid "Additional email addresses that should receive signed time off documents. Use commas or semicolons."
+msgstr "Dodatkowe adresy e-mail, które powinny otrzymywać podpisane dokumenty urlopowe. Użyj przecinków lub średników."
+
+#. module: hr_holidays_sign_oca_integration
+msgid "Additional email addresses that should receive the final signed time off document after the manager signs it."
+msgstr "Dodatkowe adresy e-mail, które powinny otrzymać końcowy podpisany dokument urlopowy po podpisie przełożonego."

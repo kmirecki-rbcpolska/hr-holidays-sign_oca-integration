@@ -11,22 +11,23 @@ class SignOcaRequest(models.Model):
 class SignOcaRequestSigner(models.Model):
     _inherit = "sign.oca.request.signer"
 
+    @staticmethod
+    def _format_time_off_date(value):
+        date_value = fields.Date.to_date(value)
+        return date_value.strftime("%d.%m.%Y") if date_value else False
+
     def get_info(self, access_token=False):
         info = super().get_info(access_token=access_token)
         leave = self.request_id.record_ref
         if leave and leave._name == "hr.leave":
             info["partner"].update(
                 {
-                    "time_off_start_date": fields.Date.to_string(
+                    "time_off_start_date": self._format_time_off_date(
                         leave.request_date_from
-                    )
-                    if leave.request_date_from
-                    else False,
-                    "time_off_end_date": fields.Date.to_string(
+                    ),
+                    "time_off_end_date": self._format_time_off_date(
                         leave.request_date_to
-                    )
-                    if leave.request_date_to
-                    else False,
+                    ),
                 }
             )
         return info
